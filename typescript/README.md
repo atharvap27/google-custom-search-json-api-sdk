@@ -1,32 +1,37 @@
-# Google Custom Search SDK (TypeScript)
+# Google Custom Search TypeScript SDK
 
-This SDK provides a strongly-typed interface to the [Google Custom Search JSON API](https://developers.google.com/custom-search/v1/overview).
+**Version: 2.0.0**
+
+A TypeScript SDK for the Google Custom Search JSON API (v2) with full support for all advanced and filtering options.
+
+## Features
+- Custom programmable search using Google CSE
+- All new v2 parameters (sort, filter, gl, dateRestrict, SafeSearch strict)
+- Full type safety for queries and responses
+- Typed error classes for rich error handling
+- API Key authentication handler; secure and pluggable
 
 ## Installation
 
-```bash
-npm install google-custom-search-sdk
 ```
-
+npm install google-customsearch-sdk
+```
 ## Usage
 
 ```typescript
-import { GoogleCustomSearchClient } from './client';
-
-const client = new GoogleCustomSearchClient('YOUR_KEY');
-
-(async () => {
-    const results = await client.search('YOUR_CX', 'typescript sdk');
-    for (const item of results.items) {
-        console.log(item.title, item.link);
-    }
-})();
+import { GoogleCustomSearchClient } from 'google-customsearch-sdk';
+const client = new GoogleCustomSearchClient('YOUR_API_KEY', 'YOUR_CSE_ID');
+const result = await client.search({ q: 'OpenAI GPT-4' });
+console.log(result.items[0].title, result.items[0].link);
 ```
+## Types
+- `ResultItem`
+- `SearchInformation`
+- `SearchResponse`
 
-All parameters and returned types are provided as strict TypeScript types.
+## API Error Classes
+- `GoogleCustomSearchAPIError`
+- `GoogleCustomSearchAuthError`
 
-Optional parameters for `search` (see models and client): start, num, safe, lr, filter, gl, cr, fileType, imgType, imgSize, siteSearch, siteSearchFilter, sort, fields.
-
-## Version
-
-1.0.0
+## License
+Apache 2.0

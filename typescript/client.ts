@@ -1,87 +1,71 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { CustomSearchResponse } from './models';
-import { APIKeyAuth } from './auth';
-import { APIError } from './errors';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { SearchResponse } from './models';
+import { GoogleCustomSearchApiKeyAuthHandler } from './auth';
+import { GoogleCustomSearchAPIError, GoogleCustomSearchAuthError } from './errors';
 
-export const VERSION = '1.0.0';
+export const VERSION = '2.0.0';
+
+export interface SearchParams {
+  q: string;
+  cx: string;
+  start?: number;
+  num?: number;
+  safe?: string;
+  lr?: string;
+  sort?: string;
+  filter?: string;
+  gl?: string;
+  dateRestrict?: string;
+  [key: string]: any;
+}
 
 export class GoogleCustomSearchClient {
-    private readonly baseUrl = 'https://www.googleapis.com/customsearch/v1';
-    private readonly auth: APIKeyAuth;
-    private readonly client: AxiosInstance;
+  private baseUrl = 'https://www.googleapis.com/customsearch/v2';
+  private apiKey: string;
+  private cx: string;
+  private axios: AxiosInstance;
+  private authHandler: GoogleCustomSearchApiKeyAuthHandler;
 
-    constructor(apiKey: string) {
-        this.auth = new APIKeyAuth(apiKey);
-        this.client = axios.create();
-
-        this.client.interceptors.response.use(response => response,
-            error => {
-                if (error.response) {
-                    throw new APIError(`API request failed: ${error.response.status} ${error.response.statusText}`);
-                }
-                throw error;
-            });
+  constructor(apiKey: string, cx: string) {
+    if (!apiKey || apiKey.trim().length < 10) {
+      throw new Error('API key is missing or appears invalid.');
     }
-
-    /**
-     * Perform a custom search.
-     * @param cx The search engine ID to use (custom search engine CX).
-     * @param q The query string.
-     * @param start Index of the first result to return (for pagination).
-     * @param num Number of search results to return.
-     * @param safe SafeSearch filtering level.
-     * @param lr Restrict results to a language.
-     * @param filter Optional filtering.
-     * @param gl Geolocation country.
-     * @param cr Country restrict.
-     * @param fileType File type filter.
-     * @param imgType Image type.
-     * @param imgSize Image size.
-     * @param siteSearch Site to search.
-     * @param siteSearchFilter Site search filter.
-     * @param sort Sort results.
-     * @param fields Fields to include.
-     */
-    async search(
-        cx: string,
-        q: string,
-        start?: number,
-        num?: number,
-        safe?: string,
-        lr?: string,
-        filter?: string,
-        gl?: string,
-        cr?: string,
-        fileType?: string,
-        imgType?: string,
-        imgSize?: string,
-        siteSearch?: string,
-        siteSearchFilter?: string,
-        sort?: string,
-        fields?: string
-    ): Promise<CustomSearchResponse> {
-        const params: Record<string, string | number | undefined> = {
-            key: this.auth.apiKey,
-            cx,
-            q,
-            start,
-            num,
-            safe,
-            lr,
-            filter,
-            gl,
-            cr,
-            fileType,
-            imgType,
-            imgSize,
-            siteSearch,
-            siteSearchFilter,
-            sort,
-            fields
-        };
-        // Remove undefined
-        Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
-        const resp: AxiosResponse = await this.client.get(this.baseUrl, { params });
-        return CustomSearchResponse.fromObject(resp.data);
+    if (!cx || !cx.trim()) {
+      throw new Error('Custom Search Engine ID (cx) is required.');
     }
+    this.apiKey = apiKey;
+    this.cx = cx;
+    this.axios = axios.create();
+    this.authHandler = new GoogleCustomSearchApiKeyAuthHandler(this.apiKey);
+  }
+
+  async search(params: Omit<SearchParams, 'key' | 'cx'> & { cx?: string }): Promise<SearchResponse> {
+    const reqParams: any = {
+      ...params,
+      cx: params.cx || this.cx,
+      key: this.apiKey
+    };
+    delete reqParams['key']; // Auth handler will inject
+    const config: AxiosRequestConfig = {
+      method: 'GET',
+      url: this.baseUrl,
+      params: reqParams,
+    };
+
+    this.authHandler.authenticate(config);
+
+    let response: AxiosResponse<any>;
+    try {
+      response = await this.axios.request(config);
+    } catch (e: any) {
+      if (e.response && (e.response.status === 401 || e.response.status === 403)) {
+        throw new GoogleCustomSearchAuthError('Authentication failed: Invalid or expired API key.');
+      }
+      throw new GoogleCustomSearchAPIError(`Network/API error: ${e.message}`);
+    }
+    if (response.status !== 200) {
+      throw new GoogleCustomSearchAPIError(`API error ${response.status}: ${response.statusText}`);
+    }
+    return SearchResponse.fromJSON(response.data);
+  }
 }
