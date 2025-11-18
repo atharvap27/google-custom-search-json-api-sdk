@@ -1,101 +1,101 @@
 {
   "api_name": "Google Custom Search JSON API",
-  "timestamp": "20251118_211517",
+  "timestamp": "20251118_211651",
   "languages": [
     "python",
     "typescript"
   ],
   "language_paths": {
-    "python": "sdk\\google_custom_search_json_api_20251118_211517\\python",
-    "typescript": "sdk\\google_custom_search_json_api_20251118_211517\\typescript"
+    "python": "sdk\\google_custom_search_json_api_20251118_211651\\python",
+    "typescript": "sdk\\google_custom_search_json_api_20251118_211651\\typescript"
   },
   "total_files": 14,
   "files": [
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\client.py",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\client.py",
       "relative_path": "client.py",
-      "size_bytes": 1625
+      "size_bytes": 3279
     },
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\models.py",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\models.py",
       "relative_path": "models.py",
-      "size_bytes": 1004
+      "size_bytes": 2848
     },
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\auth.py",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\auth.py",
       "relative_path": "auth.py",
-      "size_bytes": 129
+      "size_bytes": 99
     },
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\errors.py",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\errors.py",
       "relative_path": "errors.py",
-      "size_bytes": 42
+      "size_bytes": 51
     },
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\README.md",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\README.md",
       "relative_path": "README.md",
-      "size_bytes": 458
+      "size_bytes": 736
     },
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\setup.py",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\setup.py",
       "relative_path": "setup.py",
-      "size_bytes": 358
+      "size_bytes": 354
     },
     {
       "language": "python",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\python\\requirements.txt",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\python\\requirements.txt",
       "relative_path": "requirements.txt",
-      "size_bytes": 18
+      "size_bytes": 9
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\client.ts",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\client.ts",
       "relative_path": "client.ts",
-      "size_bytes": 1307
+      "size_bytes": 1033
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\models.ts",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\models.ts",
       "relative_path": "models.ts",
-      "size_bytes": 691
+      "size_bytes": 1711
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\auth.ts",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\auth.ts",
       "relative_path": "auth.ts",
-      "size_bytes": 172
+      "size_bytes": 135
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\errors.ts",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\errors.ts",
       "relative_path": "errors.ts",
-      "size_bytes": 355
+      "size_bytes": 167
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\README.md",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\README.md",
       "relative_path": "README.md",
-      "size_bytes": 532
+      "size_bytes": 662
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\package.json",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\package.json",
       "relative_path": "package.json",
-      "size_bytes": 358
+      "size_bytes": 527
     },
     {
       "language": "typescript",
-      "path": "sdk\\google_custom_search_json_api_20251118_211517\\typescript\\tsconfig.json",
+      "path": "sdk\\google_custom_search_json_api_20251118_211651\\typescript\\tsconfig.json",
       "relative_path": "tsconfig.json",
-      "size_bytes": 224
+      "size_bytes": 206
     }
   ],
   "session_id": "unknown",
-  "generated_at": "2025-11-18T21:15:17.429978"
+  "generated_at": "2025-11-18T21:16:51.778381"
 }

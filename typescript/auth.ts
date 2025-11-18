@@ -1,7 +1,3 @@
-// No OAuth: API Key is included in payload per request
-export class APIKeyAuth {
-  private apiKey: string;
-  constructor(apiKey: string) {
-    this.apiKey = apiKey;
-  }
+export function addApiKey(params: Record<string, any>, apiKey: string): Record<string, any> {
+    return { ...params, key: apiKey };
 }

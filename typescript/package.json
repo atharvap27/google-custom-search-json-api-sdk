@@ -1,17 +1,25 @@
 {
-  "name": "google-custom-search-sdk",
+  "name": "google-custom-search",
   "version": "1.0.0",
   "description": "TypeScript SDK for Google Custom Search JSON API",
   "main": "client.ts",
   "types": "models.ts",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"No tests yet\""
+    "test": "echo \"No tests specified\" && exit 0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/googleapis/google-custom-search"
+  },
+  "keywords": [
+    "google",
+    "customsearch",
+    "sdk"
+  ],
+  "author": "OpenAI",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^0.27.2"
-  },
-  "devDependencies": {
-    "typescript": "^4.0.0"
+    "axios": "^1.0.0"
   }
 }

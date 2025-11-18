@@ -1,2 +1,2 @@
-class GoogleAPIError(Exception):
+class GoogleCustomSearchError(Exception):
     pass

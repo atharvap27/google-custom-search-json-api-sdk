@@ -1,15 +1,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='google_custom_search_sdk',
+    name='google-custom-search',
     version='1.0.0',
     description='Python SDK for Google Custom Search JSON API',
-    author='Your Name',
+    author='OpenAI',
     packages=find_packages(),
     install_requires=[
-        'requests',
-        'pydantic'
+        'requests'
     ],
     python_requires='>=3.6',
-    include_package_data=True
+    url='https://www.googleapis.com/customsearch/v1'
 )

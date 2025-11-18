@@ -1,40 +1,85 @@
 import requests
 import logging
-from typing import Optional, Dict
-from .models import SearchRequest, SearchResponse, SafeLevel
-from .errors import GoogleAPIError
+from typing import Optional, Dict, Any, List
+from .models import SearchResponse
+from .errors import GoogleCustomSearchError
+from .auth import add_api_key
 
 __version__ = "1.0.0"
 
-class GoogleCustomSearchClient:
-    def __init__(self, api_key: str, cx: str, base_url: Optional[str] = None):
-        self.api_key = api_key
-        self.cx = cx
-        self.base_url = base_url or 'https://www.googleapis.com/customsearch/v1'
-        self.session = requests.Session()
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger('GoogleCustomSearchClient')
+logger = logging.getLogger("google_custom_search_sdk")
 
-    def search(self, q: str, start: Optional[int] = None, num: Optional[int] = None,
-               safe: Optional[SafeLevel] = None, lr: Optional[str] = None) -> SearchResponse:
-        url = self.base_url
-        payload = {
-            'key': self.api_key,
-            'cx': self.cx,
-            'q': q
+class GoogleCustomSearchClient:
+    BASE_URL = "https://www.googleapis.com/customsearch/v1"
+
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+
+    def search(self,
+               cx: str,
+               q: str,
+               sort: Optional[str] = None,
+               filter: Optional[str] = None,
+               safe: Optional[str] = None,
+               lr: Optional[str] = None,
+               num: Optional[int] = None,
+               start: Optional[int] = None,
+               cr: Optional[str] = None,
+               gl: Optional[str] = None,
+               hl: Optional[str] = None,
+               siteSearch: Optional[str] = None,
+               siteSearchFilter: Optional[str] = None,
+               dateRestrict: Optional[str] = None,
+               exactTerms: Optional[str] = None,
+               excludeTerms: Optional[str] = None,
+               fileType: Optional[str] = None,
+               imgColorType: Optional[str] = None,
+               imgDominantColor: Optional[str] = None,
+               imgSize: Optional[str] = None,
+               imgType: Optional[str] = None,
+               linkSite: Optional[str] = None,
+               orTerms: Optional[str] = None,
+               relatedSite: Optional[str] = None,
+               rights: Optional[str] = None,
+               searchType: Optional[str] = None,
+               fields: Optional[str] = None
+        ) -> SearchResponse:
+        """
+        Perform a custom search. See Google Custom Search JSON API for parameter details.
+        Returns:
+            SearchResponse: Search results
+        Raises:
+            GoogleCustomSearchError
+        """
+        params = {
+            "key": self.api_key,
+            "cx": cx,
+            "q": q,
         }
-        if start is not None:
-            payload['start'] = start
-        if num is not None:
-            payload['num'] = num
-        if safe is not None:
-            payload['safe'] = safe.value
-        if lr is not None:
-            payload['lr'] = lr
-        headers = {'Content-Type': 'application/json'}
-        self.logger.info(f'Performing search with query: {q}')
-        response = self.session.post(url, json=payload, headers=headers)
-        if not response.ok:
-            self.logger.error(f'Request failed: {response.status_code} - {response.text}')
-            raise GoogleAPIError(f'API request failed: {response.status_code} - {response.text}')
-        return SearchResponse.parse_obj(response.json())
+        OPTIONAL_PARAMS = [
+            "sort","filter","safe","lr","num","start","cr","gl","hl","siteSearch","siteSearchFilter",
+            "dateRestrict","exactTerms","excludeTerms","fileType","imgColorType","imgDominantColor","imgSize",
+            "imgType","linkSite","orTerms","relatedSite","rights","searchType","fields"
+        ]
+        for param in OPTIONAL_PARAMS:
+            val = locals().get(param)
+            if val is not None:
+                params[param] = val
+        logger.debug(f"Sending GET to {self.BASE_URL} with params: {params}")
+        try:
+            response = requests.get(self.BASE_URL, params=params)
+        except requests.RequestException as e:
+            logger.error(f"Request failed: {e}")
+            raise GoogleCustomSearchError(f"HTTP error: {e}")
+
+        if response.status_code != 200:
+            logger.error(f"Non-200 response: {response.text}")
+            raise GoogleCustomSearchError(f"API error: {response.status_code} - {response.text}")
+
+        try:
+            result = response.json()
+        except ValueError:
+            logger.error("Failed to decode JSON response")
+            raise GoogleCustomSearchError("Invalid JSON response from API")
+
+        return SearchResponse.from_dict(result)

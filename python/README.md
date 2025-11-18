@@ -1,4 +1,6 @@
-# Google Custom Search JSON API Python SDK
+# Google Custom Search Python SDK
+
+A Python SDK for Google Custom Search JSON API.
 
 ## Installation
 
@@ -9,15 +11,17 @@ pip install .
 ## Usage
 
 ```python
-from client import GoogleCustomSearchClient
-from models import SafeLevel
+from google_custom_search.client import GoogleCustomSearchClient
 
-client = GoogleCustomSearchClient(api_key="YOUR_API_KEY", cx="YOUR_CSE_ID")
-result = client.search(q="OpenAI", safe=SafeLevel.MEDIUM)
-for item in result.items or []:
+client = GoogleCustomSearchClient(api_key="YOUR_API_KEY")
+res = client.search(cx="YOUR_CSE_ID", q="openai")
+for item in res.items:
     print(item.title, item.link)
 ```
 
-## Version
-
-This package is version 1.0.0, matching the API version v1.
+## All Parameters
+| Name             | Required | Description |
+|------------------|----------|-------------|
+| cx               | yes      | Custom Search Engine ID |
+| q                | yes      | Search Query           |
+| ...              | ...      | See https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list for all options |
